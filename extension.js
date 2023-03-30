@@ -13,98 +13,96 @@ function activate(context) {
         vscode.window.showInformationMessage(
           "Clean Architecture generated successfully!"
         );
-      } else if (command === "scaffoldify.generateFeatureFiles") {
-        vscode.window
-          .showInputBox({ prompt: "Enter feature name:" })
-          .then((featureName) => {
-            if (!featureName) {
-              vscode.window.showErrorMessage("Invalid feature name");
-              return;
-            }
-
-            if (
-              !featureName.match(/^[a-zA-Z][a-zA-Z0-9]*$/) ||
-              featureName.match(/^[0-9]/) ||
-              featureName.match(/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/) ||
-              featureName.match(/^[ ]/) ||
-              featureName === "" ||
-              featureName === null ||
-              featureName === undefined
-            ) {
-              vscode.window.showErrorMessage(
-                "Invalid feature name. Feature name should start with a letter and can only contain letters and numbers"
-              );
-              return;
-            }
-            if (featureName.charAt(0) === featureName.charAt(0).toUpperCase()) {
-              featureName =
-                featureName.charAt(0).toLowerCase() + featureName.slice(1);
-            }
-            vscode.window
-              .showQuickPick(
-                [
-                  {
-                    label: "Data Layer",
-                    description: "Generate files for the Data layer",
-                    picked: true,
-                  },
-                  {
-                    label: "Domain Layer",
-                    description: "Generate files for the Domain layer",
-                    picked: true,
-                  },
-                  {
-                    label: "Presentation Layer",
-                    description: "Generate files for the Presentation layer",
-                    picked: true,
-                  },
-                ],
-                { canPickMany: true, placeHolder: "Select files to generate" }
-              )
-              .then((selectedFiles) => {
-                if (!selectedFiles) {
-                  vscode.window.showErrorMessage("Invalid file selection");
-                  return;
-                }
-
-                const selectedFileLabels = selectedFiles.map(
-                  (file) => file.label
-                );
-                if (selectedFileLabels.includes("Data Layer")) {
-                  generateDataLayerFiles(
-                    vscode.workspace.rootPath,
-                    featureName
-                  );
-                  vscode.window.showInformationMessage(
-                    "Data Layer files generated successfully!"
-                  );
-                }
-
-                if (selectedFileLabels.includes("Domain Layer")) {
-                  generateDomainLayerFiles(
-                    vscode.workspace.rootPath,
-                    featureName
-                  );
-                  vscode.window.showInformationMessage(
-                    "Domain Layer files generated successfully!"
-                  );
-                }
-
-                if (selectedFileLabels.includes("Presentation Layer")) {
-                  generatePresentationFiles(
-                    vscode.workspace.rootPath,
-                    featureName
-                  );
-                  vscode.window.showInformationMessage(
-                    "Presentation Layer files generated successfully!"
-                  );
-                }
-              });
-          });
+        return;
       }
+
+      if (command !== "scaffoldify.generateFeatureFiles") {
+        return;
+      }
+
+      vscode.window
+        .showInputBox({ prompt: "Enter feature name:" })
+        .then((featureName) => {
+          if (!featureName) {
+            vscode.window.showErrorMessage("Invalid feature name");
+            return;
+          }
+
+          if (!isValidFeatureName(featureName)) {
+            vscode.window.showErrorMessage("Invalid feature name");
+            return;
+          }
+
+          featureName =
+            featureName.charAt(0).toLowerCase() + featureName.slice(1);
+
+          vscode.window
+            .showQuickPick(
+              [
+                {
+                  label: "Data Layer",
+                  description: "Generate files for the Data layer",
+                  picked: true,
+                },
+                {
+                  label: "Domain Layer",
+                  description: "Generate files for the Domain layer",
+                  picked: true,
+                },
+                {
+                  label: "Presentation Layer",
+                  description: "Generate files for the Presentation layer",
+                  picked: true,
+                },
+              ],
+              { canPickMany: true, placeHolder: "Select files to generate" }
+            )
+            .then((selectedFiles) => {
+              if (!selectedFiles) {
+                vscode.window.showErrorMessage("Invalid file selection");
+                return;
+              }
+
+              const selectedFileLabels = selectedFiles.map(
+                (file) => file.label
+              );
+              if (selectedFileLabels.includes("Data Layer")) {
+                generateDataLayerFiles(vscode.workspace.rootPath, featureName);
+                vscode.window.showInformationMessage(
+                  "Data Layer files generated successfully!"
+                );
+              }
+
+              if (selectedFileLabels.includes("Domain Layer")) {
+                generateDomainLayerFiles(
+                  vscode.workspace.rootPath,
+                  featureName
+                );
+                vscode.window.showInformationMessage(
+                  "Domain Layer files generated successfully!"
+                );
+              }
+
+              if (selectedFileLabels.includes("Presentation Layer")) {
+                generatePresentationFiles(
+                  vscode.workspace.rootPath,
+                  featureName
+                );
+                vscode.window.showInformationMessage(
+                  "Presentation Layer files generated successfully!"
+                );
+              }
+            });
+        });
+      context.subscriptions.push(disposable);
     });
-    context.subscriptions.push(disposable);
   }
+}
+
+function isValidFeatureName(featureName) {
+  const startsWithLetter = /^[a-zA-Z]/.test(featureName);
+  const onlyLettersAndNumbers = /^[a-zA-Z0-9]*$/.test(featureName);
+  return startsWithLetter && onlyLettersAndNumbers;
 }
 
 function deactivate() {}
@@ -130,6 +128,7 @@ const commands = [
  */
 function generateCleanArchitecture(rootPath) {
   const dataDir = path.join(rootPath, "lib", "data");
+  const dataUtilsDir = path.join(dataDir, "utils");
   const domainDir = path.join(rootPath, "lib", "domain");
   const presentationDir = path.join(rootPath, "lib", "presentation");
   const dataSourcesDir = path.join(dataDir, "datasources");
@@ -145,21 +144,63 @@ function generateCleanArchitecture(rootPath) {
   const utilsDir = path.join(sharedDir, "utils");
   const widgetsDir = path.join(sharedDir, "widgets");
 
-  fs.mkdirSync(dataDir);
-  fs.mkdirSync(domainDir);
-  fs.mkdirSync(presentationDir);
-  fs.mkdirSync(dataSourcesDir);
-  fs.mkdirSync(repositoriesDir);
-  fs.mkdirSync(modelsDir);
-  fs.mkdirSync(entitiesDir);
-  fs.mkdirSync(domainRepositoriesDir);
-  fs.mkdirSync(usecasesDir);
-  fs.mkdirSync(sharedDir);
-  fs.mkdirSync(featuresDir);
-  fs.mkdirSync(constantsDir);
-  fs.mkdirSync(themeDir);
-  fs.mkdirSync(utilsDir);
-  fs.mkdirSync(widgetsDir);
+  const dirsToCreate = [
+    dataDir,
+    dataUtilsDir,
+    domainDir,
+    presentationDir,
+    dataSourcesDir,
+    repositoriesDir,
+    modelsDir,
+    entitiesDir,
+    domainRepositoriesDir,
+    usecasesDir,
+    sharedDir,
+    featuresDir,
+    constantsDir,
+    themeDir,
+    utilsDir,
+    widgetsDir,
+  ];
+
+  for (const dir of dirsToCreate) {
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        `Error creating directory ${dir}: ${err.message}`
+      );
+    }
+  }
+
+  const dataUtilsTemplates = [
+    { fileName: "http_service.dart", templateName: "http_service.template" },
+    { fileName: "failure.dart", templateName: "failure.template" },
+    { fileName: "api_response.dart", templateName: "api_response.template" },
+  ];
+
+  for (const { fileName, templateName } of dataUtilsTemplates) {
+    try {
+      const content = fs.readFileSync(
+        path.join(__dirname, "templates", "data", "utils", templateName),
+        "utf8"
+      );
+      const filePath = path.join(dataUtilsDir, fileName);
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, content);
+      }
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        `Error creating file ${fileName}: ${err.message}`
+      );
+    }
+  }
+
+  vscode.window.showInformationMessage(
+    `Clean architecture files generated successfully.`
+  );
 }
 
 /**
@@ -286,150 +327,73 @@ function generateDomainLayerFiles(rootPath, featureName) {
   const repositoriesDir = path.join(domainDir, "repositories");
   const usecasesDir = path.join(domainDir, "usecases");
 
-  try {
-    if (!fs.existsSync(entitiesDir)) {
-      fs.mkdirSync(entitiesDir);
-    }
-    if (!fs.existsSync(repositoriesDir)) {
-      fs.mkdirSync(repositoriesDir);
-    }
-    if (!fs.existsSync(usecasesDir)) {
-      fs.mkdirSync(usecasesDir);
-    }
-
-    const entityTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "entity.template")
-    );
-    const repositoryTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "repository.template")
-    );
-    const getusecaseTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "fetch_usecase.template")
-    );
-
-    const getidusecaseTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "fetch_id_usecase.template")
-    );
-
-    const addusecaseTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "add_usecase.template")
-    );
-
-    const updateusecaseTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "update_usecase.template")
-    );
-
-    const deleteusecaseTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "delete_usecase.template")
-    );
-
-    const featureNameUpper =
-      featureName.charAt(0).toUpperCase() + featureName.slice(1);
-
-    const entityContent = entityTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const repositoryContent = repositoryTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const getusecaseContent = getusecaseTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const getidusecaseContent = getidusecaseTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const addusecaseContent = addusecaseTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const updateusecaseContent = updateusecaseTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const deleteusecaseContent = deleteusecaseTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    if (!fs.existsSync(path.join(entitiesDir, `${featureName}.dart`))) {
-      fs.writeFileSync(
-        path.join(entitiesDir, `${featureName}.dart`),
-        entityContent
+  const dirs = [entitiesDir, repositoriesDir, usecasesDir];
+  dirs.forEach((dir) => {
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        `Error creating directory ${dir}: ${err.message}`
       );
     }
-    if (
-      !fs.existsSync(
-        path.join(repositoriesDir, `${featureName}_repository.dart`)
-      )
-    ) {
-      fs.writeFileSync(
-        path.join(repositoriesDir, `${featureName}_repository.dart`),
-        repositoryContent
-      );
-    }
-    if (
-      !fs.existsSync(path.join(usecasesDir, `fetch_${featureName}s_usecase.dart`))
-    ) {
-      fs.writeFileSync(
-        path.join(usecasesDir, `fetch_${featureName}s_usecase.dart`),
-        getusecaseContent
-      );
-    }
-    if (
-      !fs.existsSync(path.join(usecasesDir, `create_${featureName}_usecase.dart`))
-    ) {
-      fs.writeFileSync(
-        path.join(usecasesDir, `create_${featureName}_usecase.dart`),
-        addusecaseContent
-      );
-    }
-    if (
-      !fs.existsSync(
-        path.join(usecasesDir, `update_${featureName}_usecase.dart`)
-      )
-    ) {
-      fs.writeFileSync(
-        path.join(usecasesDir, `update_${featureName}_usecase.dart`),
-        updateusecaseContent
-      );
-    }
-    if (
-      !fs.existsSync(path.join(usecasesDir, `fetch_${featureName}_usecase.dart`))
-    ) {
-      fs.writeFileSync(
-        path.join(usecasesDir, `fetch_${featureName}_usecase.dart`),
-        getidusecaseContent
-      );
-    }
-    if (
-      !fs.existsSync(
-        path.join(usecasesDir, `delete_${featureName}_usecase.dart`)
-      )
-    ) {
-      fs.writeFileSync(
-        path.join(usecasesDir, `delete_${featureName}_usecase.dart`),
-        deleteusecaseContent
-      );
-    }
+  });
 
-    vscode.window.showInformationMessage(
-      `Domain layer files for ${featureName} feature generated successfully.`
-    );
-  } catch (err) {
-    vscode.window.showErrorMessage(
-      `Error generating domain layer files for ${featureName} feature: ${err.message}`
-    );
-  }
+  const templates = [
+    { template: "entity.template", file: `${featureName}.dart` },
+    {
+      template: "repository.template",
+      file: `${featureName}_repository.dart`,
+    },
+    {
+      template: "fetch_usecase.template",
+      file: `fetch_${featureName}s_usecase.dart`,
+    },
+    {
+      template: "fetch_id_usecase.template",
+      file: `fetch_${featureName}_usecase.dart`,
+    },
+    {
+      template: "add_usecase.template",
+      file: `create_${featureName}_usecase.dart`,
+    },
+    {
+      template: "update_usecase.template",
+      file: `update_${featureName}_usecase.dart`,
+    },
+    {
+      template: "delete_usecase.template",
+      file: `delete_${featureName}_usecase.dart`,
+    },
+  ];
+
+  templates.forEach((t) => {
+    try {
+      const templateContent = fs.readFileSync(
+        path.join(__dirname, "templates", "domain", t.template)
+      );
+      const fileContent = templateContent
+        .toString()
+        .replace(
+          /FEATURE_NAME/g,
+          featureName.charAt(0).toUpperCase() + featureName.slice(1)
+        )
+        .replace(/FEATURE_LOWER_NAME/g, featureName);
+      const filePath = path.join(usecasesDir, t.file);
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, fileContent);
+      }
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        `Error generating ${t.file} for ${featureName} feature: ${err.message}`
+      );
+    }
+  });
+
+  vscode.window.showInformationMessage(
+    `Domain layer files for ${featureName} feature generated successfully.`
+  );
 }
 
 /**
@@ -442,100 +406,64 @@ function generatePresentationFiles(rootPath, featureName) {
   const screensDir = path.join(featureDir, "screens");
   const widgetsDir = path.join(featureDir, "widgets");
 
-  try {
-    if (!fs.existsSync(featureDir)) {
-      fs.mkdirSync(featureDir);
-    }
-    if (!fs.existsSync(screensDir)) {
-      fs.mkdirSync(screensDir);
-    }
-    if (!fs.existsSync(widgetsDir)) {
-      fs.mkdirSync(widgetsDir);
-    }
-
-    const mainScreenTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "presentation", "main_screen.template")
-    );
-
-    const viewScreenTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "presentation", "view_screen.template")
-    );
-
-    const createScreenTemplate = fs.readFileSync(
-      path.join(
-        __dirname,
-        "templates",
-        "presentation",
-        "create_screen.template"
-      )
-    );
-
-    const updateScreenTemplate = fs.readFileSync(
-      path.join(
-        __dirname,
-        "templates",
-        "presentation",
-        "update_screen.template"
-      )
-    );
-
-    const featureNameUpper =
-      featureName.charAt(0).toUpperCase() + featureName.slice(1);
-
-    const mainScreenContent = mainScreenTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const viewScreenContent = viewScreenTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-    const createScreenContent = createScreenTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    const updateScreenContent = updateScreenTemplate
-      .toString()
-      .replace(/FEATURE_NAME/g, featureNameUpper)
-      .replace(/FEATURE_LOWER_NAME/g, featureName);
-
-    if (!fs.existsSync(path.join(screensDir, `${featureName}s_screen.dart`))) {
-      fs.writeFileSync(
-        path.join(screensDir, `${featureName}s_screen.dart`),
-        mainScreenContent
+  const dirsToCreate = [featureDir, screensDir, widgetsDir];
+  for (const dir of dirsToCreate) {
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        `Error creating directory ${dir}: ${err.message}`
       );
+      return;
     }
-    if (!fs.existsSync(path.join(screensDir, `${featureName}_screen.dart`))) {
-      fs.writeFileSync(
-        path.join(screensDir, `${featureName}_screen.dart`),
-        viewScreenContent
-      );
-    }
-    if (
-      !fs.existsSync(path.join(screensDir, `create_${featureName}_screen.dart`))
-    ) {
-      fs.writeFileSync(
-        path.join(screensDir, `create_${featureName}_screen.dart`),
-        createScreenContent
-      );
-    }
-    if (
-      !fs.existsSync(path.join(screensDir, `update_${featureName}_screen.dart`))
-    ) {
-      fs.writeFileSync(
-        path.join(screensDir, `update_${featureName}_screen.dart`),
-        updateScreenContent
-      );
-    }
-
-    vscode.window.showInformationMessage(
-      `Presentation layer files for ${featureName} feature generated successfully.`
-    );
-  } catch (err) {
-    vscode.window.showErrorMessage(
-      `Error generating presentation layer files for ${featureName} feature: ${err.message}`
-    );
   }
+
+  const templates = [
+    {
+      template: "main_screen.template",
+      fileName: `${featureName}s_screen.dart`,
+    },
+    {
+      template: "view_screen.template",
+      fileName: `${featureName}_screen.dart`,
+    },
+    {
+      template: "create_screen.template",
+      fileName: `create_${featureName}_screen.dart`,
+    },
+    {
+      template: "update_screen.template",
+      fileName: `update_${featureName}_screen.dart`,
+    },
+  ];
+
+  const featureNameUpper =
+    featureName.charAt(0).toUpperCase() + featureName.slice(1);
+
+  for (const { template, fileName } of templates) {
+    try {
+      const content = fs
+        .readFileSync(
+          path.join(__dirname, "templates", "presentation", template)
+        )
+        .toString()
+        .replace(/FEATURE_NAME/g, featureNameUpper)
+        .replace(/FEATURE_LOWER_NAME/g, featureName);
+
+      const filePath = path.join(screensDir, fileName);
+      if (!fs.existsSync(filePath)) {
+        fs.writeFileSync(filePath, content);
+      }
+    } catch (err) {
+      vscode.window.showErrorMessage(
+        `Error generating file ${fileName}: ${err.message}`
+      );
+    }
+  }
+
+  vscode.window.showInformationMessage(
+    `Presentation layer files for ${featureName} feature generated successfully.`
+  );
 }

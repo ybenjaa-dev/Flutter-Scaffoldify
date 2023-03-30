@@ -6,6 +6,6 @@ class FetchFEATURE_NAMEsUseCase {
   FetchFEATURE_NAMEsUseCase({required this.repository});
 
   Future<List<FEATURE_NAME>> call() {
-    return repository.FetchFEATURE_NAMEs();
+    return repository.fetchFEATURE_NAMEs();
   }
 }

@@ -1,0 +1,46 @@
+abstract class Failure {
+  final String message;
+  final String? statusCode;
+  Failure({required this.message, this.statusCode});
+}
+
+class NetworkFailure extends Failure {
+  NetworkFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class ServerFailure extends Failure {
+  ServerFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class BadRequestFailure extends Failure {
+  BadRequestFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class CacheFailure extends Failure {
+  CacheFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class AuthenticationFailure extends Failure {
+  AuthenticationFailure({required String message, String? statusCode})
+      : super(message: message, statusCode: statusCode);
+}
+
+class ValidationError extends Failure {
+  ValidationError({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class UnauthorisedFailure extends Failure {
+  UnauthorisedFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class ForbiddenFailure extends Failure {
+  ForbiddenFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class NotFoundFailure extends Failure {
+  NotFoundFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
+
+class ParseFailure extends Failure {
+  ParseFailure({required String message, String? statusCode}) : super(message: message, statusCode: statusCode);
+}
