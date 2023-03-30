@@ -304,11 +304,11 @@ function generateDomainLayerFiles(rootPath, featureName) {
       path.join(__dirname, "templates", "domain", "repository.template")
     );
     const getusecaseTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "get_usecase.template")
+      path.join(__dirname, "templates", "domain", "fetch_usecase.template")
     );
 
     const getidusecaseTemplate = fs.readFileSync(
-      path.join(__dirname, "templates", "domain", "get_id_usecase.template")
+      path.join(__dirname, "templates", "domain", "fetch_id_usecase.template")
     );
 
     const addusecaseTemplate = fs.readFileSync(
@@ -378,18 +378,18 @@ function generateDomainLayerFiles(rootPath, featureName) {
       );
     }
     if (
-      !fs.existsSync(path.join(usecasesDir, `get_${featureName}s_usecase.dart`))
+      !fs.existsSync(path.join(usecasesDir, `fetch_${featureName}s_usecase.dart`))
     ) {
       fs.writeFileSync(
-        path.join(usecasesDir, `get_${featureName}s_usecase.dart`),
+        path.join(usecasesDir, `fetch_${featureName}s_usecase.dart`),
         getusecaseContent
       );
     }
     if (
-      !fs.existsSync(path.join(usecasesDir, `add_${featureName}_usecase.dart`))
+      !fs.existsSync(path.join(usecasesDir, `create_${featureName}_usecase.dart`))
     ) {
       fs.writeFileSync(
-        path.join(usecasesDir, `add_${featureName}_usecase.dart`),
+        path.join(usecasesDir, `create_${featureName}_usecase.dart`),
         addusecaseContent
       );
     }
@@ -404,10 +404,10 @@ function generateDomainLayerFiles(rootPath, featureName) {
       );
     }
     if (
-      !fs.existsSync(path.join(usecasesDir, `get_${featureName}_usecase.dart`))
+      !fs.existsSync(path.join(usecasesDir, `fetch_${featureName}_usecase.dart`))
     ) {
       fs.writeFileSync(
-        path.join(usecasesDir, `get_${featureName}_usecase.dart`),
+        path.join(usecasesDir, `fetch_${featureName}_usecase.dart`),
         getidusecaseContent
       );
     }
