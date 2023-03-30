@@ -1,11 +1,11 @@
-import '../entities/FEATURE_LOWER_NAME.dart';
-import '../repositories/FEATURE_LOWER_NAME_repository.dart';
+import '../../entities/FEATURE_LOWER_NAME.dart';
+import '../../repositories/FEATURE_LOWER_NAME_repository.dart';
 
 class FetchFEATURE_NAMEUseCase {
   final FEATURE_NAMERepository repository;
   FetchFEATURE_NAMEUseCase({required this.repository});
 
-  Future<FEATURE_NAME> call(String FEATURE_NAMEId) {
-    return repository.fetchFEATURE_NAME(FEATURE_NAMEId);
+  Future<FEATURE_NAME> call(String FEATURE_LOWER_NAMEId) {
+    return repository.fetchFEATURE_NAME(FEATURE_LOWER_NAMEId);
   }
 }

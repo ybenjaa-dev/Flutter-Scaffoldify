@@ -12,7 +12,7 @@ class FEATURE_NAMERepositoryImpl implements FEATURE_NAMERemoteDataSource {
   Future<FEATURE_NAMEModel> createFEATURE_NAME(Map<String, dynamic> FEATURE_LOWER_NAME) async => const FEATURE_NAMEModel(id: "");
 
   @override
-  Future<FEATURE_NAMEModel> updateFEATURE_NAME(String FEATURE_LOWER_NAMEId, Map<String, dynamic> FEATURE_LOWER_NAME) async => const FEATURE_NAMEModel(id: "");
+  Future<FEATURE_NAMEModel> editFEATURE_NAME(String FEATURE_LOWER_NAMEId, Map<String, dynamic> FEATURE_LOWER_NAME) async => const FEATURE_NAMEModel(id: "");
 
   @override
   Future<void> deleteFEATURE_NAME(String FEATURE_LOWER_NAMEId) async {}

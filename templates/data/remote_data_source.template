@@ -5,6 +5,6 @@ abstract class FEATURE_NAMERemoteDataSource {
   Future<List<FEATURE_NAMEModel>> fetchFEATURE_NAMEs();
   Future<FEATURE_NAMEModel> fetchFEATURE_NAME(String FEATURE_LOWER_NAMEId);
   Future<FEATURE_NAMEModel> createFEATURE_NAME(Map<String, dynamic> FEATURE_LOWER_NAME);
-  Future<FEATURE_NAMEModel> updateFEATURE_NAME(String FEATURE_LOWER_NAMEId, Map<String, dynamic> FEATURE_LOWER_NAME);
+  Future<FEATURE_NAMEModel> editFEATURE_NAME(String FEATURE_LOWER_NAMEId, Map<String, dynamic> FEATURE_LOWER_NAME);
   Future<void> deleteFEATURE_NAME(String FEATURE_LOWER_NAMEId);
 }

@@ -7,9 +7,9 @@ class CreateFEATURE_NAMEScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CreateFEATURE_NAME'),
+        title: const Text('CreateFEATURE_NAME'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('CreateFEATURE_NAME'),
       ),
     );

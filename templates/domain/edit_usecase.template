@@ -1,11 +1,11 @@
 import '../../entities/FEATURE_LOWER_NAME.dart';
 import '../../repositories/FEATURE_LOWER_NAME_repository.dart';
 
-class AddFEATURE_NAMEUseCase {
+class EditFEATURE_NAMEUseCase {
   final FEATURE_NAMERepository repository;
-  AddFEATURE_NAMEUseCase({required this.repository});
+  EditFEATURE_NAMEUseCase({required this.repository});
 
   Future<FEATURE_NAME> call(FEATURE_NAME FEATURE_LOWER_NAME) {
-    return repository.addFEATURE_NAME(FEATURE_LOWER_NAME);
+    return repository.editFEATURE_NAME(FEATURE_LOWER_NAME);
   }
 }

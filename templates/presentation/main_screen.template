@@ -7,9 +7,9 @@ class FEATURE_NAMEsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FEATURE_NAMEs'),
+        title: const Text('FEATURE_NAMEs'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('FEATURE_NAMEs'),
       ),
     );

@@ -210,10 +210,13 @@ function generateCleanArchitecture(rootPath) {
 function generateDataLayerFiles(rootPath, featureName) {
   const dataDir = path.join(rootPath, "lib", "data");
   const dataSourcesDir = path.join(dataDir, "datasources");
-  // make folder name featureName in plural
   const featureDir = path.join(dataSourcesDir, featureName + "_data_source");
   const repositoriesDir = path.join(dataDir, "repositories");
   const modelsDir = path.join(dataDir, "models");
+
+  if (!fs.existsSync(dataDir)) {
+    generateCleanArchitecture(rootPath);
+  }
 
   try {
     if (!fs.existsSync(dataSourcesDir)) {
@@ -325,8 +328,14 @@ function generateDomainLayerFiles(rootPath, featureName) {
   const domainDir = path.join(rootPath, "lib", "domain");
   const entitiesDir = path.join(domainDir, "entities");
   const repositoriesDir = path.join(domainDir, "repositories");
-  const usecasesDir = path.join(domainDir, "usecases");
-
+  const usecasesDir = path.join(
+    domainDir,
+    "usecases",
+    featureName + "s_usecase"
+  );
+  if (!fs.existsSync(domainDir)) {
+    generateCleanArchitecture(rootPath);
+  }
   const dirs = [entitiesDir, repositoriesDir, usecasesDir];
   dirs.forEach((dir) => {
     try {
@@ -367,8 +376,8 @@ function generateDomainLayerFiles(rootPath, featureName) {
       path: usecasesDir,
     },
     {
-      template: "update_usecase.template",
-      file: `update_${featureName}_usecase.dart`,
+      template: "edit_usecase.template",
+      file: `edit_${featureName}_usecase.dart`,
       path: usecasesDir,
     },
     {
@@ -415,7 +424,9 @@ function generatePresentationFiles(rootPath, featureName) {
   const featureDir = path.join(presentationDir, "features", featureName + "s");
   const screensDir = path.join(featureDir, "screens");
   const widgetsDir = path.join(featureDir, "widgets");
-
+  if (!fs.existsSync(presentationDir)) {
+    generateCleanArchitecture(rootPath);
+  }
   const dirsToCreate = [featureDir, screensDir, widgetsDir];
   for (const dir of dirsToCreate) {
     try {
@@ -444,8 +455,8 @@ function generatePresentationFiles(rootPath, featureName) {
       fileName: `create_${featureName}_screen.dart`,
     },
     {
-      template: "update_screen.template",
-      fileName: `update_${featureName}_screen.dart`,
+      template: "edit_screen.template",
+      fileName: `edit_${featureName}_screen.dart`,
     },
   ];
 

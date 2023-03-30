@@ -1,18 +1,18 @@
 
 import 'package:flutter/material.dart';
 
-class ViewFEATURE_NAMEScreen extends StatelessWidget {
+class EditFEATURE_NAMEScreen extends StatelessWidget {
   final String FEATURE_LOWER_NAMEId;
-  const ViewFEATURE_NAMEScreen({super.key,required this.FEATURE_LOWER_NAMEId});
+  const EditFEATURE_NAMEScreen({super.key,required this.FEATURE_LOWER_NAMEId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('View FEATURE_NAME'),
+        title: const Text('Edit FEATURE_NAME'),
       ),
       body: const Center(
-        child: Text('View FEATURE_NAME'),
+        child: Text('Edit FEATURE_NAME'),
       ),
     );
   }
