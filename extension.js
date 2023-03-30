@@ -123,7 +123,6 @@ module.exports = {
   deactivate,
 };
 
-
 /**
  * @param {string} rootPath
  */
@@ -342,30 +341,40 @@ function generateDomainLayerFiles(rootPath, featureName) {
   });
 
   const templates = [
-    { template: "entity.template", file: `${featureName}.dart` },
+    {
+      template: "entity.template",
+      file: `${featureName}.dart`,
+      path: entitiesDir,
+    },
     {
       template: "repository.template",
       file: `${featureName}_repository.dart`,
+      path: repositoriesDir,
     },
     {
       template: "fetch_usecase.template",
       file: `fetch_${featureName}s_usecase.dart`,
+      path: usecasesDir,
     },
     {
       template: "fetch_id_usecase.template",
       file: `fetch_${featureName}_usecase.dart`,
+      path: usecasesDir,
     },
     {
       template: "add_usecase.template",
       file: `create_${featureName}_usecase.dart`,
+      path: usecasesDir,
     },
     {
       template: "update_usecase.template",
       file: `update_${featureName}_usecase.dart`,
+      path: usecasesDir,
     },
     {
       template: "delete_usecase.template",
       file: `delete_${featureName}_usecase.dart`,
+      path: usecasesDir,
     },
   ];
 
@@ -381,7 +390,7 @@ function generateDomainLayerFiles(rootPath, featureName) {
           featureName.charAt(0).toUpperCase() + featureName.slice(1)
         )
         .replace(/FEATURE_LOWER_NAME/g, featureName);
-      const filePath = path.join(usecasesDir, t.file);
+      const filePath = path.join(t.path, t.file);
       if (!fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, fileContent);
       }
