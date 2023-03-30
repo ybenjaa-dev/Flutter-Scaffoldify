@@ -3,6 +3,12 @@
   "displayName": "Scaffoldify",
   "description": "Scaffoldify is a VS Code extension that helps you generate files for clean architecture in your Flutter projects. With Scaffoldify, you can quickly create data layer, domain layer, presentation, model, and entity files using predefined templates. This saves you time and helps you follow best practices when building your Flutter apps. Scaffoldify supports customizable templates, so you can tailor it to your project's needs. Get started with Scaffoldify today and streamline your Flutter development workflow!",
   "version": "0.0.1",
+  "publisher": "Youssef Ben Jaa",
+  "license": "MIT",
+  "galleryBanner": {
+    "color": "#2F80ED",
+    "theme": "light"
+  },
   "engines": {
     "vscode": "^1.76.0"
   },
