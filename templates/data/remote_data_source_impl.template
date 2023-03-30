@@ -1,0 +1,19 @@
+import '../models/FEATURE_LOWER_NAME_model.dart';
+import 'FEATURE_LOWER_NAME_remote_data_source.dart';
+
+class FEATURE_NAMERepositoryImpl implements FEATURE_NAMERemoteDataSource {
+  @override
+  Future<List<FEATURE_NAMEModel>> getFEATURE_NAMEs() async => Future.value([]);
+
+  @override
+  Future<FEATURE_NAMEModel> getFEATURE_NAME(String FEATURE_LOWER_NAMEId) async => const FEATURE_NAMEModel(id: "");
+
+  @override
+  Future<FEATURE_NAMEModel> addFEATURE_NAME(Map<String, dynamic> FEATURE_LOWER_NAME) async => const FEATURE_NAMEModel(id: "");
+
+  @override
+  Future<FEATURE_NAMEModel> updateFEATURE_NAME(String FEATURE_LOWER_NAMEId, Map<String, dynamic> FEATURE_LOWER_NAME) async => const FEATURE_NAMEModel(id: "");
+
+  @override
+  Future<void> deleteFEATURE_NAME(String FEATURE_LOWER_NAMEId) async {}
+}

@@ -1,0 +1,5 @@
+class FEATURE_NAMEModel {
+  final String id;
+
+  const FEATURE_NAMEModel({ required this.id });
+}

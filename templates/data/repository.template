@@ -1,0 +1,2 @@
+abstract class FEATURE_NAMERepository {}
+class FEATURE_NAMERepositoryImpl implements FEATURE_NAMERepository {}

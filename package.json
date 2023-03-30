@@ -15,16 +15,23 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "flutter-scaffoldify.helloWorld",
-        "title": "Hello World"
+        "command": "scaffoldify.generateCleanArchitecture",
+        "title": "Generate Clean Architecture"
+      },
+      {
+        "command": "scaffoldify.generateFeatureFiles",
+        "title": "Generate Feature Files"
       }
     ]
   },
+  "activationEvents": [
+    "onCommand:scaffoldify.generateCleanArchitecture",
+    "onCommand:scaffoldify.generateFeatureFiles"
+  ],
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",

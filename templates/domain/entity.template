@@ -1,0 +1,10 @@
+import 'package:equatable/equatable.dart';
+
+class FEATURE_NAME extends Equatable {
+  final String id;
+
+  const FEATURE_NAME({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}

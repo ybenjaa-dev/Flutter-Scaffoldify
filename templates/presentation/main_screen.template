@@ -1,0 +1,10 @@
+import 'package:flutter/material.dart';
+
+class FEATURE_NAMEsScreen extends StatelessWidget {
+  const FEATURE_NAMEsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
