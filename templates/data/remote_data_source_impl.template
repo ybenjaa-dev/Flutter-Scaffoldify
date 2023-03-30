@@ -1,4 +1,4 @@
-import '../models/FEATURE_LOWER_NAME_model.dart';
+import '../../models/FEATURE_LOWER_NAME_model.dart';
 import 'FEATURE_LOWER_NAME_remote_data_source.dart';
 
 class FEATURE_NAMERepositoryImpl implements FEATURE_NAMERemoteDataSource {

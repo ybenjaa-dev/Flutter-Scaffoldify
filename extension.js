@@ -21,7 +21,7 @@ function activate(context) {
               vscode.window.showErrorMessage("Invalid feature name");
               return;
             }
-            // check if start with number or special character or space or empty string or null or undefined then show error message
+
             if (
               !featureName.match(/^[a-zA-Z][a-zA-Z0-9]*$/) ||
               featureName.match(/^[0-9]/) ||
@@ -37,7 +37,8 @@ function activate(context) {
               return;
             }
             if (featureName.charAt(0) === featureName.charAt(0).toUpperCase()) {
-              featureName = featureName.charAt(0).toLowerCase() + featureName.slice(1);
+              featureName =
+                featureName.charAt(0).toLowerCase() + featureName.slice(1);
             }
             vscode.window
               .showQuickPick(
@@ -45,14 +46,17 @@ function activate(context) {
                   {
                     label: "Data Layer",
                     description: "Generate files for the Data layer",
+                    picked: true,
                   },
                   {
                     label: "Domain Layer",
                     description: "Generate files for the Domain layer",
+                    picked: true,
                   },
                   {
                     label: "Presentation Layer",
                     description: "Generate files for the Presentation layer",
+                    picked: true,
                   },
                 ],
                 { canPickMany: true, placeHolder: "Select files to generate" }
@@ -165,12 +169,17 @@ function generateCleanArchitecture(rootPath) {
 function generateDataLayerFiles(rootPath, featureName) {
   const dataDir = path.join(rootPath, "lib", "data");
   const dataSourcesDir = path.join(dataDir, "datasources");
+  // make folder name featureName in plural
+  const featureDir = path.join(dataSourcesDir, featureName + "_data_source");
   const repositoriesDir = path.join(dataDir, "repositories");
   const modelsDir = path.join(dataDir, "models");
 
   try {
     if (!fs.existsSync(dataSourcesDir)) {
       fs.mkdirSync(dataSourcesDir);
+    }
+    if (!fs.existsSync(featureDir)) {
+      fs.mkdirSync(featureDir);
     }
     if (!fs.existsSync(repositoriesDir)) {
       fs.mkdirSync(repositoriesDir);
@@ -222,24 +231,21 @@ function generateDataLayerFiles(rootPath, featureName) {
 
     if (
       !fs.existsSync(
-        path.join(dataSourcesDir, `${featureName}_remote_data_source.dart`)
+        path.join(featureDir, `${featureName}_remote_data_source.dart`)
       )
     ) {
       fs.writeFileSync(
-        path.join(dataSourcesDir, `${featureName}_remote_data_source.dart`),
+        path.join(featureDir, `${featureName}_remote_data_source.dart`),
         dataSourceContent
       );
     }
     if (
       !fs.existsSync(
-        path.join(dataSourcesDir, `${featureName}_remote_data_source_impl.dart`)
+        path.join(featureDir, `${featureName}_remote_data_source_impl.dart`)
       )
     ) {
       fs.writeFileSync(
-        path.join(
-          dataSourcesDir,
-          `${featureName}_remote_data_source_impl.dart`
-        ),
+        path.join(featureDir, `${featureName}_remote_data_source_impl.dart`),
         dataSourceImplContent
       );
     }
@@ -432,8 +438,9 @@ function generateDomainLayerFiles(rootPath, featureName) {
  */
 function generatePresentationFiles(rootPath, featureName) {
   const presentationDir = path.join(rootPath, "lib", "presentation");
-  const featureDir = path.join(presentationDir, "features", featureName);
+  const featureDir = path.join(presentationDir, "features", featureName + "s");
   const screensDir = path.join(featureDir, "screens");
+  const widgetsDir = path.join(featureDir, "widgets");
 
   try {
     if (!fs.existsSync(featureDir)) {
@@ -442,11 +449,68 @@ function generatePresentationFiles(rootPath, featureName) {
     if (!fs.existsSync(screensDir)) {
       fs.mkdirSync(screensDir);
     }
+    if (!fs.existsSync(widgetsDir)) {
+      fs.mkdirSync(widgetsDir);
+    }
+
+    const mainScreenTemplate = fs.readFileSync(
+      path.join(__dirname, "templates", "presentation", "main_screen.template")
+    );
+
+    const viewScreenTemplate = fs.readFileSync(
+      path.join(__dirname, "templates", "presentation", "view_screen.template")
+    );
+
+    const createScreenTemplate = fs.readFileSync(
+      path.join(
+        __dirname,
+        "templates",
+        "presentation",
+        "create_screen.template"
+      )
+    );
+
+    const updateScreenTemplate = fs.readFileSync(
+      path.join(
+        __dirname,
+        "templates",
+        "presentation",
+        "update_screen.template"
+      )
+    );
+
+    const featureNameUpper =
+      featureName.charAt(0).toUpperCase() + featureName.slice(1);
+
+    const mainScreenContent = mainScreenTemplate
+      .toString()
+      .replace(/FEATURE_NAME/g, featureNameUpper)
+      .replace(/FEATURE_LOWER_NAME/g, featureName);
+
+    const viewScreenContent = viewScreenTemplate
+      .toString()
+      .replace(/FEATURE_NAME/g, featureNameUpper)
+      .replace(/FEATURE_LOWER_NAME/g, featureName);
+    const createScreenContent = createScreenTemplate
+      .toString()
+      .replace(/FEATURE_NAME/g, featureNameUpper)
+      .replace(/FEATURE_LOWER_NAME/g, featureName);
+
+    const updateScreenContent = updateScreenTemplate
+      .toString()
+      .replace(/FEATURE_NAME/g, featureNameUpper)
+      .replace(/FEATURE_LOWER_NAME/g, featureName);
 
     if (!fs.existsSync(path.join(screensDir, `${featureName}s_screen.dart`))) {
       fs.writeFileSync(
         path.join(screensDir, `${featureName}s_screen.dart`),
-        ""
+        mainScreenContent
+      );
+    }
+    if (!fs.existsSync(path.join(screensDir, `${featureName}_screen.dart`))) {
+      fs.writeFileSync(
+        path.join(screensDir, `${featureName}_screen.dart`),
+        viewScreenContent
       );
     }
     if (
@@ -454,7 +518,7 @@ function generatePresentationFiles(rootPath, featureName) {
     ) {
       fs.writeFileSync(
         path.join(screensDir, `create_${featureName}_screen.dart`),
-        ""
+        createScreenContent
       );
     }
     if (
@@ -462,7 +526,7 @@ function generatePresentationFiles(rootPath, featureName) {
     ) {
       fs.writeFileSync(
         path.join(screensDir, `update_${featureName}_screen.dart`),
-        ""
+        updateScreenContent
       );
     }
 

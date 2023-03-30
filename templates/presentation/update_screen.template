@@ -2,10 +2,18 @@
 import 'package:flutter/material.dart';
 
 class UpdateFEATURE_NAMEScreen extends StatelessWidget {
-  const UpdateFEATURE_NAMEScreen({super.key});
+  final String FEATURE_NAMEId;
+  const UpdateFEATURE_NAMEScreen({super.key,required this.FEATURE_NAMEId});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Update FEATURE_NAME'),
+      ),
+      body: Center(
+        child: Text('Update FEATURE_NAME'),
+      ),
+    );
   }
 }

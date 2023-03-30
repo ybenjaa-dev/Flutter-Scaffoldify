@@ -5,6 +5,13 @@ class CreateFEATURE_NAMEScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('CreateFEATURE_NAME'),
+      ),
+      body: Center(
+        child: Text('CreateFEATURE_NAME'),
+      ),
+    );
   }
 }

@@ -1,0 +1,19 @@
+
+import 'package:flutter/material.dart';
+
+class ViewFEATURE_NAMEScreen extends StatelessWidget {
+  final String FEATURE_NAMEId;
+  const ViewFEATURE_NAMEScreen({super.key,required this.FEATURE_NAMEId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('View FEATURE_NAME'),
+      ),
+      body: Center(
+        child: Text('View FEATURE_NAME'),
+      ),
+    );
+  }
+}

@@ -1,5 +1,5 @@
 
-import '../models/FEATURE_LOWER_NAME_model.dart';
+import '../../models/FEATURE_LOWER_NAME_model.dart';
 
 abstract class FEATURE_NAMERemoteDataSource {
   Future<List<FEATURE_NAMEModel>> getFEATURE_NAMEs();

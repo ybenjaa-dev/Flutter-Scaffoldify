@@ -55,4 +55,3 @@ Scaffoldify can be configured by modifying the following settings in the VS Code
 ## License
 
 Scaffoldify is licensed under the MIT License. See the `LICENSE` file for more information.
-# Flutter-Scaffoldify
