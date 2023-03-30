@@ -2,6 +2,17 @@ const vscode = require("vscode");
 const path = require("path");
 const fs = require("fs");
 
+const commands = [
+  {
+    command: "scaffoldify.generateCleanArchitecture",
+    title: "Generate Clean Architecture",
+  },
+  {
+    command: "scaffoldify.generateFeatureFiles",
+    title: "Generate Feature Files",
+  },
+];
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -112,16 +123,6 @@ module.exports = {
   deactivate,
 };
 
-const commands = [
-  {
-    command: "scaffoldify.generateCleanArchitecture",
-    title: "Generate Clean Architecture",
-  },
-  {
-    command: "scaffoldify.generateFeatureFiles",
-    title: "Generate Feature Files",
-  },
-];
 
 /**
  * @param {string} rootPath
