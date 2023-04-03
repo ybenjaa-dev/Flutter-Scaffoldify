@@ -1,19 +1,59 @@
+import '../../../presentation/shared/constants/endpoints/user_endpoints.dart';
 import '../../models/FEATURE_LOWER_NAME_model.dart';
+import '../../utils/api_response.dart';
+import '../../utils/http_service.dart';
 import 'FEATURE_LOWER_NAME_remote_data_source.dart';
 
-class FEATURE_NAMERepositoryImpl implements FEATURE_NAMERemoteDataSource {
-  @override
-  Future<List<FEATURE_NAMEModel>> fetchFEATURE_NAMEs() async => Future.value([]);
+class FEATURE_NAMERemoteDataSourceImpl implements FEATURE_NAMERemoteDataSource {
+  final HttpService httpService;
+  const FEATURE_NAMERemoteDataSourceImpl({required this.httpService});
 
   @override
-  Future<FEATURE_NAMEModel> fetchFEATURE_NAME(String FEATURE_LOWER_NAMEId) async => const FEATURE_NAMEModel(id: "");
+  Future<List<FEATURE_NAMEModel>> fetchFEATURE_NAMEs() async {
+    try {
+      final ApiResponse response = await httpService.get(url: UserEndpoints.getFEATURE_NAMEs);
+      return FEATURE_NAMEModel.fromJsonList(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
-  Future<FEATURE_NAMEModel> createFEATURE_NAME(Map<String, dynamic> FEATURE_LOWER_NAME) async => const FEATURE_NAMEModel(id: "");
+  Future<FEATURE_NAMEModel> fetchFEATURE_NAME(String FEATURE_LOWER_NAMEId) async {
+    try {
+      final ApiResponse response = await httpService.get(url: UserEndpoints.getFEATURE_NAMEById(FEATURE_LOWER_NAMEId));
+      return FEATURE_NAMEModel.fromJson(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
-  Future<FEATURE_NAMEModel> editFEATURE_NAME(String FEATURE_LOWER_NAMEId, Map<String, dynamic> FEATURE_LOWER_NAME) async => const FEATURE_NAMEModel(id: "");
+  Future<FEATURE_NAMEModel> createFEATURE_NAME(Map<String, dynamic> FEATURE_LOWER_NAME) async {
+    try {
+      final ApiResponse response = await httpService.post(url: UserEndpoints.createFEATURE_NAME, body: FEATURE_LOWER_NAME);
+      return FEATURE_NAMEModel.fromJson(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
-  Future<void> deleteFEATURE_NAME(String FEATURE_LOWER_NAMEId) async {}
+  Future<FEATURE_NAMEModel> editFEATURE_NAME(String FEATURE_LOWER_NAMEId, Map<String, dynamic> FEATURE_LOWER_NAME) async {
+    try {
+      final ApiResponse response = await httpService.put(url: UserEndpoints.editFEATURE_NAME(FEATURE_LOWER_NAMEId), body: FEATURE_LOWER_NAME);
+      return FEATURE_NAMEModel.fromJson(response.data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteFEATURE_NAME(String FEATURE_LOWER_NAMEId) async {
+    try {
+      await httpService.delete(url: UserEndpoints.deleteFEATURE_NAME(FEATURE_LOWER_NAMEId));
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

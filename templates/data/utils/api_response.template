@@ -1,4 +1,4 @@
-class ApiResponse<T> {
+class ApiResponse {
   final bool success;
   final String message;
   final int? statusCode;

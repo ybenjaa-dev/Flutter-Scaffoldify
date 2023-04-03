@@ -4,19 +4,12 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'api_response.dart';
 import 'failure.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-final httpServiceProvider = Provider((ref) => HttpService());
 
 class HttpService {
   Future<ApiResponse> get({required String url}) async {
-    try {
-      final response = await http.get(Uri.parse(url));
-      log("URL: $url");
-      return _handleResponse(response);
-    } catch (e) {
-      throw NetworkFailure(message: e.toString());
-    }
+    final response = await http.get(Uri.parse(url));
+    log("URL: $url");
+    return _handleResponse(response);
   }
 
   Future<ApiResponse> post({required String url, required Map<String, dynamic> body}) async {
@@ -92,40 +85,37 @@ class HttpService {
   ApiResponse _handleResponse(http.Response response) {
     try {
       final responseJson = json.decode(response.body.toString());
-
+      final ApiResponse apiResponse = ApiResponse.fromJson(responseJson);
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        return ApiResponse.fromJson(responseJson);
+        return apiResponse;
       } else if (response.statusCode == 401) {
         throw UnauthorisedFailure(
-          message: 'Unauthorised',
+          message: apiResponse.message,
           statusCode: response.statusCode.toString(),
         );
       } else if (response.statusCode == 403) {
         throw ForbiddenFailure(
-          message: 'Forbidden',
+          message: apiResponse.message,
           statusCode: response.statusCode.toString(),
         );
       } else if (response.statusCode == 404) {
         throw NotFoundFailure(
-          message: 'Not Found',
+          message: apiResponse.message,
           statusCode: response.statusCode.toString(),
         );
       } else if (response.statusCode == 500) {
         throw ServerFailure(
-          message: 'Server Error',
+          message: apiResponse.message,
           statusCode: response.statusCode.toString(),
         );
       } else {
         throw ServerFailure(
-          message: 'Failed to parse response',
+          message: apiResponse.message,
           statusCode: response.statusCode.toString(),
         );
       }
     } catch (e) {
-      throw ServerFailure(
-        message: 'Failed to parse response: $e',
-        statusCode: response.statusCode.toString(),
-      );
+      rethrow;
     }
   }
 }

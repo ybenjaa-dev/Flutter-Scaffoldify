@@ -177,6 +177,7 @@ function generateCleanArchitecture(rootPath) {
 
   const dataUtilsTemplates = [
     { fileName: "http_service.dart", templateName: "http_service.template" },
+    { fileName: "http_service_provider.dart", templateName: "http_service_provider.template" },
     { fileName: "failure.dart", templateName: "failure.template" },
     { fileName: "api_response.dart", templateName: "api_response.template" },
   ];

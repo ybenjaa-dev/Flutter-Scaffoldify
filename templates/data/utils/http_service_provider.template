@@ -1,0 +1,4 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'http_service.dart';
+
+final httpServiceProvider = Provider((ref) => HttpService());

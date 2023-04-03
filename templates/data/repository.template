@@ -1,2 +1,64 @@
-abstract class FEATURE_NAMERepository {}
-class FEATURE_NAMERepositoryImpl implements FEATURE_NAMERepository {}
+import '../../domain/entities/FEATURE_LOWER_NAME.dart';
+import '../../domain/repositories/FEATURE_LOWER_NAME_repository.dart';
+import '../datasources/FEATURE_LOWER_NAME_data_source/FEATURE_LOWER_NAME_remote_data_source.dart';
+
+class FEATURE_NAMERepositoryImpl implements FEATURE_NAMERepository {
+  FEATURE_NAMERepositoryImpl({required this.dataSource});
+
+  final FEATURE_NAMERemoteDataSource dataSource;
+
+  @override
+  Future<List<FEATURE_NAME>> fetchFEATURE_NAMEs() async {
+    try {
+      final FEATURE_LOWER_NAMEs = await dataSource.fetchFEATURE_NAMEs();
+      final FEATURE_LOWER_NAMEList = FEATURE_LOWER_NAMEs.map((FEATURE_LOWER_NAME) => FEATURE_LOWER_NAME.toEntity()).toList();
+      return FEATURE_LOWER_NAMEList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<FEATURE_NAME> fetchFEATURE_NAME(String id) async {
+    try {
+      final FEATURE_LOWER_NAME = await dataSource.fetchFEATURE_NAME(id);
+      final FEATURE_LOWER_NAMEEntity = FEATURE_LOWER_NAME.toEntity();
+      return FEATURE_LOWER_NAMEEntity;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<FEATURE_NAME> addFEATURE_NAME(FEATURE_NAME FEATURE_LOWER_NAME) async {
+    try {
+      final FEATURE_LOWER_NAMEMap = FEATURE_LOWER_NAME.toModel().toJson();
+      final createdFEATURE_NAME = await dataSource.createFEATURE_NAME(FEATURE_LOWER_NAMEMap);
+      final createdFEATURE_NAMEEntity = createdFEATURE_NAME.toEntity();
+      return createdFEATURE_NAMEEntity;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<FEATURE_NAME> editFEATURE_NAME(FEATURE_NAME FEATURE_LOWER_NAME) async {
+    try {
+      final FEATURE_LOWER_NAMEMap = FEATURE_LOWER_NAME.toModel().toJson();
+      final editedFEATURE_NAME = await dataSource.editFEATURE_NAME(FEATURE_LOWER_NAME.id, FEATURE_LOWER_NAMEMap);
+      final editedFEATURE_NAMEEntity = editedFEATURE_NAME.toEntity();
+      return editedFEATURE_NAMEEntity;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteFEATURE_NAME(FEATURE_NAME FEATURE_LOWER_NAME) async {
+    try {
+      await dataSource.deleteFEATURE_NAME(FEATURE_LOWER_NAME.id);
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
